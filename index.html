@@ -6,59 +6,52 @@
     <title>永恆畢卡索 AR語音導覽</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* 核心設定: 全螢幕，禁用滾動，內容垂直排列 */
+        /* 核心設定: 全螢幕，禁用滾動，移除 Flex 佈局的垂直間距計算 */
         body {
             background-color: #edb91a; 
             font-family: 'Inter', sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between; 
-            align-items: center;
+            /* 移除 Flex 佈局的 space-between 衝突 */
+            display: block; 
             height: 100vh; /* 佔滿整個視窗高度 */
             overflow: hidden; /* 禁用所有滾動 */
             margin: 0;
             padding: 0; 
-            
-            /* 【修正 2】計算 body 底部填充：按鈕高度 + 20px 間距 */
-            /* 假設按鈕區塊高約 4.5rem，我們預留 4.5rem + 20px */
-            padding-bottom: calc(4.5rem + 20px); 
         }
 
-        /* 內容區域: 佔用剩餘空間，作為長圖的容器 */
+        /* 圖片容器: 必須是整個頁面的主要容器，並設置相對定位 */
         .content-area {
-            flex-grow: 1; 
             width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            height: 100%; /* 佔滿 body 的 100vh */
+            position: relative; /* 【關鍵】讓內部元素可以絕對定位 */
             padding: 0; 
+            margin: 0;
             box-sizing: border-box;
-            min-height: 0;
-            position: relative; 
         }
 
-        /* 圖片修正: 確保圖片寬度佔滿 100% 且高度被裁切填滿容器 */
+        /* 圖片修正: 確保圖片寬度佔滿 100% 且高度被裁切填滿容器 (作為背景) */
         .full-visual-image {
             width: 100%; 
             height: 100%; 
-            object-fit: cover; 
+            object-fit: cover; /* 確保圖片填滿容器，超出部分裁切 */
             position: absolute; 
             top: 0;
             left: 0;
-            z-index: 1; /* 圖片層級設為 1 (後景) */
+            z-index: 1; /* 【背景】圖片層級設為 1 */
         }
 
-        /* 按鈕容器: 固定在底部，疊在圖片上方 */
+        /* 按鈕容器: 使用絕對定位，浮動在圖片上方 */
         .button-footer {
             width: 100%;
-            /* 讓按鈕容器的垂直 padding 保持合理 */
-            padding: 0.5rem 1.5rem 0.5rem; 
+            padding: 0.5rem 1.5rem; 
             background-color: transparent; 
             box-shadow: none; 
-            z-index: 10; /* 【修正 1】按鈕層級設為 10 (前景，高於圖片 1) */
-            
-            /* 【修正 3】新增 margin-bottom 實現 20px 上移 */
-            margin-bottom: 20px; 
+            z-index: 10; /* 【前景】按鈕層級設為 10，確保在圖片上方 */
+
+            /* 【關鍵修正】絕對定位，實現重疊和上移 */
+            position: absolute; 
+            left: 0;
+            bottom: 20px; /* 【精確定位】按鈕底部距離 content-area 底部 20px */
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -70,29 +63,29 @@
             class="full-visual-image"
             onerror="this.onerror=null;this.src='images/error_placeholder.png';"
         />
-    </div>
 
-    <footer class="button-footer">
-        <div class="flex space-x-4">
-            <a 
-                href="https://shop.firenzecx.com/products/eternal-picasso-art-muses-and-companions-exhibition-ticket"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex-1 transition-transform transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none"
-            >
-                <img src="images/btn_ticket.png" alt="線上購票按鈕" style="width: 100%; height: auto; display: block;">
-            </a>
-            
-            <a 
-                href="https://rd.arplanets.com/redirect?ac=picassoar"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex-1 transition-transform transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none"
-            >
-                <img src="images/btn_ar.png" alt="現場開通使用按鈕" style="width: 100%; height: auto; display: block;">
-            </a>
-        </div>
-    </footer>
+        <footer class="button-footer">
+            <div class="flex space-x-4">
+                <a 
+                    href="https://shop.firenzecx.com/products/eternal-picasso-art-muses-and-companions-exhibition-ticket"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex-1 transition-transform transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none"
+                >
+                    <img src="images/btn_ticket.png" alt="線上購票按鈕" style="width: 100%; height: auto; display: block;">
+                </a>
+                
+                <a 
+                    href="https://rd.arplanets.com/redirect?ac=picassoar"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex-1 transition-transform transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none"
+                >
+                    <img src="images/btn_ar.png" alt="現場開通使用按鈕" style="width: 100%; height: auto; display: block;">
+                </a>
+            </div>
+        </footer>
+    </div>
     
 </body>
 </html>
